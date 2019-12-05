@@ -10,7 +10,7 @@ addpath('mex');
 %% Parametres
 % -------INPUT-------
 classname={'Regular','Parallax','Crowd','Bundled/Crowd','para_1_20_10_40_20_error_2147483647/Regular','para_1_20_10_40_40_iter_1/Regular','Crowd','Parallax'};
-for n=1:3
+for n=2:3
     caseFile=strcat('E:/data/BUNDLED2/images/',classname{1,n},'/');
     num=length(dir(strcat(caseFile,'*.avi')));
     doc=dir(strcat(caseFile,'*.avi'));
@@ -19,7 +19,7 @@ for n=1:3
         casename{1,i}=doc(i).name;%num2str(i-1);
     end
     
-    for i=1:length(casename)
+    for i=5:length(casename)
         inputDir = strcat(caseFile,casename{1,i},'/');
         outputDir = strcat('E:/data/BUNDLED2/results_images/',classname{1,n},'/',casename{1,i},'/');
         mkdir(outputDir);
@@ -27,14 +27,14 @@ for n=1:3
         % -------TRACK-------
         TracksPerFrame = 512;           % number of trajectories in a frame, 200 - 2000 is OK
         % -------STABLE------
-        MeshSize = 12;                  % The mesh size of bundled camera path, 6 - 12 is OK
+        MeshSize = 16;                  % The mesh size of bundled camera path, 6 - 12 is OK
         Smoothness = 3;                 % Adjust how stable the output is, 0.5 - 3 is OK
-        Span = 30;                      % Omega_t the window span of smoothing camera path, usually set it equal to framerate
+        Span = 60;                      % Omega_t the window span of smoothing camera path, usually set it equal to framerate
         Cropping = 1;                   % adjust how similar the result to the original video, usually set to 1
         Rigidity = 2;                   % adjust the rigidity of the output mesh, consider set it larger if distortion is too significant, [1 - 4]
         iteration = 20;                 % number of iterations when optimizing the camera path [10 - 20]
         % -------OUTPUT------
-        OutputPadding = 0;            % the padding around the video, should be large enough. 
+        OutputPadding = 200;            % the padding around the video, should be large enough. 
 
         %% Track by KLT
         tic;

@@ -206,12 +206,18 @@ classdef Bundled < handle
                 disp(['rendering: # ' int2str(frameIndex)]);
                 fileName = fileList(frameIndex).name;                                
                 I = imread([obj.seq fileName]);                
-                warp = obj.render1(I, frameIndex, obj.P, obj.C);                
+                [warp,error_flag] = obj.render1(I, frameIndex, obj.P, obj.C);
+                if(error_flag==1)
+                    break;
+                end
                 imwrite(uint8(warp), [outPath '/' int2str(frameIndex) '.bmp']);                
+            end
+            if(error_flag==1)
+                rmdir(outPath, 's')
             end
         end
         
-        function imwarp = render1(obj, I, frameIndex, P, C)
+        function [imwarp,error_flag] = render1(obj, I, frameIndex, P, C)
             src = Mesh(obj.videoHeight, obj.videoWidth, obj.quadWidth, obj.quadHeight);
             des = Mesh(obj.videoHeight, obj.videoWidth, obj.quadWidth, obj.quadHeight);
             
@@ -306,7 +312,13 @@ classdef Bundled < handle
 
                     qd1 = Quad(p0,p1,p2,p3);
                     qd2 = Quad(q0,q1,q2,q3);
-                    imwarp = quadWarp(obj,I,qd1,qd2, imwarp);
+                    [imwarp,error_flag] = quadWarp(obj,I,qd1,qd2, imwarp);
+                    if(error_flag==1)
+                        break;
+                    end
+                end
+                if(error_flag==1)
+                    break;
                 end
             end 
         end
@@ -324,7 +336,7 @@ classdef Bundled < handle
             yy = 0.5 * (y(min_i(min_j))+ y(min_j));            
         end
         
-        function imwarp = quadWarp(obj,im,q1,q2, imwarp)
+        function [imwarp,error_flag] = quadWarp(obj,im,q1,q2, imwarp)
             
             minx = q2.getMinX();
             maxx = q2.getMaxX();
@@ -347,7 +359,7 @@ classdef Bundled < handle
             HH = homography_4pts(source',target');
             HH = HH./HH(3,3);
 
-            imwarp = myWarp(minx,maxx,miny,maxy,double(im),imwarp,HH,obj.gap);
+            [imwarp,error_flag] = myWarp(minx,maxx,miny,maxy,double(im),imwarp,HH,obj.gap);
             imwarp = uint8(imwarp);            
         end
         

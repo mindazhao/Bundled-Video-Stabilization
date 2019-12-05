@@ -1,5 +1,5 @@
-function warpIm = myWarp(minx,maxx,miny,maxy,im,warpIm,invH,gap)
-
+function [warpIm,error_flag] = myWarp(minx,maxx,miny,maxy,im,warpIm,invH,gap)
+    error_flag=0;
     [h,w,~] = size(warpIm);
     
     if gap > 0
@@ -25,12 +25,13 @@ function warpIm = myWarp(minx,maxx,miny,maxy,im,warpIm,invH,gap)
     xprime=(hScene(1,:)./(hScene(3,:)))';
     yprime=(hScene(2,:)./(hScene(3,:)))';
     
-    xprime = reshape(xprime, szIm);
-    yprime = reshape(yprime, szIm);
-    
-    result(:,:,1) = interp2(im(:,:,1),xprime,yprime,'cubic');
-    result(:,:,2) = interp2(im(:,:,2),xprime,yprime,'cubic');
-    result(:,:,3) = interp2(im(:,:,3),xprime,yprime,'cubic');
+    try
+        xprime = reshape(xprime, szIm);
+        yprime = reshape(yprime, szIm);
+
+        result(:,:,1) = interp2(im(:,:,1),xprime,yprime,'cubic');
+        result(:,:,2) = interp2(im(:,:,2),xprime,yprime,'cubic');
+        result(:,:,3) = interp2(im(:,:,3),xprime,yprime,'cubic');
     
 %   %use spline interpolation for better quality with lower speed
 %     result(:,:,1) = interp2(im(:,:,1),xprime,yprime,'spline');
@@ -39,8 +40,10 @@ function warpIm = myWarp(minx,maxx,miny,maxy,im,warpIm,invH,gap)
     
     
 
-    warpIm(miny+gap:maxy-1+gap,minx+gap:maxx-1+gap,1) = result(:,:,1);
-    warpIm(miny+gap:maxy-1+gap,minx+gap:maxx-1+gap,2) = result(:,:,2);
-    warpIm(miny+gap:maxy-1+gap,minx+gap:maxx-1+gap,3) = result(:,:,3);
-
+        warpIm(miny+gap:maxy-1+gap,minx+gap:maxx-1+gap,1) = result(:,:,1);
+        warpIm(miny+gap:maxy-1+gap,minx+gap:maxx-1+gap,2) = result(:,:,2);
+        warpIm(miny+gap:maxy-1+gap,minx+gap:maxx-1+gap,3) = result(:,:,3);
+    catch
+        error_flag=1;
+    end
 end
