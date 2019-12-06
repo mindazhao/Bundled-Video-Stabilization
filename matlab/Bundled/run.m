@@ -19,7 +19,7 @@ for n=2:3
         casename{1,i}=doc(i).name;%num2str(i-1);
     end
     
-    for i=5:length(casename)
+    for i=1:length(casename)
         inputDir = strcat(caseFile,casename{1,i},'/');
         outputDir = strcat('E:/data/BUNDLED2/results_images/',classname{1,n},'/',casename{1,i},'/');
         mkdir(outputDir);

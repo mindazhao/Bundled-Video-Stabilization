@@ -19,11 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Homography_from_trj_backup_2016年7月4日写论文版本【调好了参数】.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Homography_from_trj_backup_2016年7月4日写论文版本【调好了参数】.cpp" />
-    <ClCompile Include="merge_frame_for_bundled.cpp" />
+    <ClCompile Include="clip_frame_for_bundled.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
